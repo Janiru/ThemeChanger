@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Playground
 {
     partial class frmPlayground
@@ -32,9 +34,7 @@ namespace Playground
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPlayground));
             this.animate = new Guna.UI2.WinForms.Guna2AnimateWindow(this.components);
-            this.animatorShrinkTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlContainer = new System.Windows.Forms.Panel();
-            this.animatorTimer = new System.Windows.Forms.Timer(this.components);
             this.SampleElement1 = new Guna.UI2.WinForms.Guna2GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -49,9 +49,10 @@ namespace Playground
             this.label2 = new System.Windows.Forms.Label();
             this.SampleElement2 = new Guna.UI2.WinForms.Guna2GroupBox();
             this.SampleElement4 = new Guna.UI2.WinForms.Guna2GroupBox();
-            this.btnTheme = new Guna.UI2.WinForms.Guna2Button();
             this.SampleElement3 = new Guna.UI2.WinForms.Guna2GroupBox();
+            this.btnTheme = new Guna.UI2.WinForms.Guna2Button();
             this.animator = new Guna.UI2.WinForms.Guna2CirclePictureBox();
+            this.animatorTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlContainer.SuspendLayout();
             this.SampleElement1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -65,11 +66,6 @@ namespace Playground
             // animate
             // 
             this.animate.Interval = 1000;
-            // 
-            // animatorShrinkTimer
-            // 
-            this.animatorShrinkTimer.Interval = 1;
-            this.animatorShrinkTimer.Tick += new System.EventHandler(this.animatorShrinkTimer_Tick);
             // 
             // pnlContainer
             // 
@@ -88,11 +84,6 @@ namespace Playground
             this.pnlContainer.TabIndex = 2;
             this.pnlContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContainer_Paint);
             // 
-            // animatorTimer
-            // 
-            this.animatorTimer.Interval = 1;
-            this.animatorTimer.Tick += new System.EventHandler(this.animatorTimer_Tick);
-            // 
             // SampleElement1
             // 
             this.SampleElement1.Controls.Add(this.label1);
@@ -109,6 +100,7 @@ namespace Playground
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.LightBlue;
             this.label1.Location = new System.Drawing.Point(23, 101);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
@@ -117,9 +109,9 @@ namespace Playground
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(891, 77);
+            this.button1.Location = new System.Drawing.Point(891, 68);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(75, 44);
             this.button1.TabIndex = 14;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -239,6 +231,18 @@ namespace Playground
             this.SampleElement4.TabIndex = 11;
             this.SampleElement4.Text = "SampleElement";
             // 
+            // SampleElement3
+            // 
+            this.SampleElement3.FillColor = System.Drawing.Color.LightBlue;
+            this.SampleElement3.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.SampleElement3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.SampleElement3.Location = new System.Drawing.Point(115, 385);
+            this.SampleElement3.Name = "SampleElement3";
+            this.SampleElement3.ShadowDecoration.Parent = this.SampleElement3;
+            this.SampleElement3.Size = new System.Drawing.Size(300, 200);
+            this.SampleElement3.TabIndex = 12;
+            this.SampleElement3.Text = "SampleElement";
+            // 
             // btnTheme
             // 
             this.btnTheme.BackColor = System.Drawing.Color.Transparent;
@@ -261,18 +265,6 @@ namespace Playground
             this.btnTheme.UseTransparentBackground = true;
             this.btnTheme.Click += new System.EventHandler(this.btnTheme_Click);
             // 
-            // SampleElement3
-            // 
-            this.SampleElement3.FillColor = System.Drawing.Color.LightBlue;
-            this.SampleElement3.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.SampleElement3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
-            this.SampleElement3.Location = new System.Drawing.Point(115, 385);
-            this.SampleElement3.Name = "SampleElement3";
-            this.SampleElement3.ShadowDecoration.Parent = this.SampleElement3;
-            this.SampleElement3.Size = new System.Drawing.Size(300, 200);
-            this.SampleElement3.TabIndex = 12;
-            this.SampleElement3.Text = "SampleElement";
-            // 
             // animator
             // 
             this.animator.BackColor = System.Drawing.Color.Transparent;
@@ -286,6 +278,11 @@ namespace Playground
             this.animator.TabIndex = 10;
             this.animator.TabStop = false;
             this.animator.UseTransparentBackground = true;
+            // 
+            // animatorTimer
+            // 
+            this.animatorTimer.Interval = 1;
+            this.animatorTimer.Tick += new System.EventHandler(this.animatorTimer_Tick);
             // 
             // frmPlayground
             // 
@@ -315,9 +312,9 @@ namespace Playground
 
         }
 
+
         #endregion
         private Guna.UI2.WinForms.Guna2AnimateWindow animate;
-        private System.Windows.Forms.Timer animatorShrinkTimer;
         private System.Windows.Forms.Panel pnlContainer;
         private System.Windows.Forms.Timer animatorTimer;
         private Guna.UI2.WinForms.Guna2GroupBox SampleElement1;
