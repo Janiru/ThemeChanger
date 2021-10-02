@@ -17,11 +17,12 @@ namespace Playground
         private Point centerPoint;
         private int AnimatorRadius;
         private Bitmap bmpBefore;
-        private Bitmap bmpAfter;
 
         private int _step = 0;
 
-        public int step { get { return _step; }
+        public int step
+        {
+            get { return _step; }
             set { _step = value; label1.Text = $"{value}"; }
         }
 
@@ -35,54 +36,41 @@ namespace Playground
 
         private void btnTheme_Click(object sender, EventArgs e)
         {
+            //Transition for the animation
             Transitions.Transition t = new Transitions.Transition(new Transitions.TransitionType_EaseInEaseOut(2000));
             t.add(this, "step", 1000);
             t.run();
 
+            //Change the theme to its inverse
             btnTheme.Checked = !btnTheme.Checked;
-            bmpBefore = new Bitmap(pnlContainer.Width, pnlContainer.Height);
-            bmpAfter = new Bitmap(pnlContainer.Width, pnlContainer.Height);
 
-            bool darkMode = btnTheme.Checked;
+            bmpBefore = new Bitmap(pnlContainer.Width, pnlContainer.Height); //bmpBefore to record the image of the theme that is going to be transformed
+
+            //calculate the extent of the animtion otherwise it could cause a lot of memory allocation for the animation, still some aspects have to be resolved
             AnimatorRadius = (int)Math.Sqrt(Math.Pow(Math.Abs(Width - centerPoint.X), 2.0) + Math.Pow(Math.Abs(Height - centerPoint.Y), 2.0));
 
-            if (darkMode)
-            {
-                changeTheme(btnTheme.Checked);
-                pnlContainer.DrawToBitmap(bmpBefore, new Rectangle(0, 0, bmpBefore.Width, bmpBefore.Height));
+            //Get a bitmap image of the theme that is to be transformed to and change back to the previuos theme to make the animation visible
+            changeTheme(btnTheme.Checked);
+            pnlContainer.DrawToBitmap(bmpBefore, new Rectangle(0, 0, bmpBefore.Width, bmpBefore.Height));
 
-                btnTheme.Checked = !btnTheme.Checked;
-                changeTheme(btnTheme.Checked);
+            btnTheme.Checked = !btnTheme.Checked;
+            changeTheme(btnTheme.Checked);
 
-                animator.BringToFront();
-                btnTheme.BringToFront();
+            animator.BringToFront();
 
-                animatorTimer.Start();
-            }
-            else
-            {
-                pnlContainer.DrawToBitmap(bmpAfter, new Rectangle(0, 0, bmpAfter.Width, bmpAfter.Height));
-
-                animator.BringToFront();
-
-                animator.Width = animator.Height = AnimatorRadius * 2;
-                animator.Location = new Point(centerPoint.X - animator.Width / 2, centerPoint.Y - animator.Height / 2);
-                //btnTheme.Checked = !btnTheme.Checked;
-                changeTheme(btnTheme.Checked);
-
-
-                animatorShrinkTimer.Start();
-            }
+            //Animator starts
+            animatorTimer.Start();
         }
 
         private void changeTheme(bool darkMode)
         {
             if (darkMode)
             {
-                pnlContainer.BackColor
+                pnlContainer.BackColor = button1.BackColor = label1.BackColor
                 = SampleElement1.FillColor = SampleElement2.FillColor = SampleElement3.FillColor = SampleElement4.FillColor
                 = Color.FromArgb(40, 40, 40);
 
+                button1.ForeColor = Color.White;
                 SampleElement1.CustomBorderColor = SampleElement2.CustomBorderColor = SampleElement3.CustomBorderColor = SampleElement4.CustomBorderColor
                 = SampleElement1.BorderColor = SampleElement2.BorderColor = SampleElement3.BorderColor = SampleElement4.BorderColor
                 = Color.FromArgb(80, 80, 80);
@@ -92,9 +80,13 @@ namespace Playground
             }
             else
             {
-                pnlContainer.BackColor = Color.White;
-                
-                SampleElement1.FillColor = SampleElement2.FillColor = SampleElement3.FillColor = SampleElement4.FillColor 
+                button1.ForeColor = Color.Black;
+
+                button1.BackColor
+                = pnlContainer.BackColor = Color.White;
+
+                label1.BackColor =
+                SampleElement1.FillColor = SampleElement2.FillColor = SampleElement3.FillColor = SampleElement4.FillColor
                 = Color.LightBlue;
 
                 SampleElement1.CustomBorderColor = SampleElement2.CustomBorderColor = SampleElement3.CustomBorderColor = SampleElement4.CustomBorderColor
@@ -109,7 +101,7 @@ namespace Playground
 
         private void animatorTimer_Tick(object sender, EventArgs e)
         {
-            if(animator.Width / 2 < AnimatorRadius) 
+            if (animator.Width / 2 < AnimatorRadius)
             {
                 animator.Size = new Size(animator.Size.Width + 100, animator.Size.Height + 100);
                 animator.Location = new Point(animator.Location.X - 50, animator.Location.Y - 50);
@@ -122,46 +114,18 @@ namespace Playground
 
                 animator.Image = dynImage;
             }
-            else 
-            {
-                animatorTimer.Stop();
-
-                animator.Image = null;
-
-                animator.Size = btnTheme.Size; 
-                animator.Location = btnTheme.Location;
-                animator.SendToBack();
-
-                btnTheme.Checked = !btnTheme.Checked;
-                changeTheme(btnTheme.Checked);
-
-                btnTheme.FillColor = Color.Transparent;
-            }
-        }
-
-        private void animatorShrinkTimer_Tick(object sender, EventArgs e)
-        {
-            if (animator.Width - 100 > btnTheme.Size.Width)
-            {
-                animator.Size = new Size(animator.Size.Width - 100, animator.Size.Height - 100);
-                animator.Location = new Point(animator.Location.X + 50, animator.Location.Y + 50);
-
-                Bitmap dynImage = new Bitmap(animator.Width, animator.Height);
-                Point dynPoint = new Point(dynImage.Width / 2 - centerPoint.X, dynImage.Height / 2 - centerPoint.Y);
-                Graphics dynGraphics = Graphics.FromImage(dynImage);
-                dynGraphics.DrawImage(bmpAfter, dynPoint);
-
-                animator.Image = dynImage;
-            }
             else
             {
-                animatorShrinkTimer.Stop();
+                animatorTimer.Stop();
 
                 animator.Image = null;
 
                 animator.Size = btnTheme.Size;
                 animator.Location = btnTheme.Location;
                 animator.SendToBack();
+
+                btnTheme.Checked = !btnTheme.Checked;
+                changeTheme(btnTheme.Checked);
 
                 btnTheme.FillColor = Color.Transparent;
             }
